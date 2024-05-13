@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,11 +28,12 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -46,6 +48,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -223,7 +226,6 @@ fun RecipeListUi(
                                         contentDescription = "goto home screen"
                                     )
                                 }
-                                Spacer(modifier = Modifier.width(MyPadding.medium))
                                 AnimatedVisibility(visible = !showSearchBoxState.value) {
                                     IconButton(onClick = { showSearchBoxState.value = true }) {
                                         Icon(
@@ -233,23 +235,26 @@ fun RecipeListUi(
                                     }
                                 }
                                 AnimatedVisibility(visible = showSearchBoxState.value) {
-                                    OutlinedTextField(
-                                        value = searchBoxState,
-                                        onValueChange = viewModel::onSearchBoxValueChanged,
+                                    Box(
                                         modifier = Modifier
-                                            .fillMaxWidth(0.8f),
-                                        label = {
-                                            Text("Search ${viewModel.category.value} recipes")
-                                        },
-                                        placeholder = {
-                                            Text("Search ${viewModel.category.value} recipes")
-                                        },
-                                        keyboardActions = KeyboardActions(onSearch = {
-                                            keyboardController?.hide()
-                                        }),
-                                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
-                                    )
-                                    Spacer(modifier = Modifier.width(MyPadding.medium))
+                                            .fillMaxWidth(0.8f)
+                                            .clip(shape = RoundedCornerShape(50.dp)) // Adjust the radius as needed
+                                            .background(Color.White) // Set white background
+                                    ) {
+                                        TextField(
+                                            value = searchBoxState,
+                                            onValueChange = viewModel::onSearchBoxValueChanged,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            label = {
+                                                Text("Search ${viewModel.category.value} recipes", color = Color.Black)
+                                            },
+                                            keyboardActions = KeyboardActions(onSearch = {
+                                                keyboardController?.hide()
+                                            }),
+                                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                                            colors = TextFieldDefaults.textFieldColors(textColor = Color.Black)
+                                        )
+                                    }
 
                                 }
                                 AnimatedVisibility(visible = showSearchBoxState.value) {
