@@ -2,16 +2,17 @@
 Recipe Discover is a recipe app designed to help users explore a vast collection of recipes conveniently. With Recipe Discover, users can browse recipes by category, search for specific recipes, and save their favorite recipes for easy access.
 
 ## Features
-Browse by Category: Users can explore recipes categorized by cuisine, meal type, dietary preferences, and more.
-Search Functionality: Users can search for recipes using keywords to find specific dishes quickly.
-Favorite Recipes: Users can add recipes to their favorites list for easy access later.
-Clean Architecture: Recipe Discover follows the principles of Clean Architecture, ensuring a modular and maintainable codebase.
-Dependency Injection: Hilt is used for Dependency Injection, facilitating easier management of dependencies throughout the app.
-Local Storage: Room is utilized for local storage, enabling efficient storage and retrieval of recipe data on the device.
-Image Loading: Coil library is employed for image loading, providing smooth and efficient loading of recipe images.
-Asynchronous Programming: Coroutine is used for asynchronous programming, allowing seamless execution of background tasks without blocking the main thread.
-Paging Library: Paging library is used for efficient pagination of recipe data, providing smooth scrolling and optimized memory usage.
-Jetpack Compose UI: Recipe Discover's user interface is built using Jetpack Compose, offering a modern and intuitive user experience.
+- **Browse by Category**: Users can explore recipes categorized by cuisine, meal type, dietary preferences, and more.
+- **Search Functionality**: Users can search for recipes using keywords to find specific dishes quickly.
+- **Favorite Recipes**: Users can add recipes to their favorites list for easy access later.
+- **Clean Architecture**: Recipe Discover follows the principles of Clean Architecture, ensuring a modular and maintainable codebase.
+- **Dependency Injection**: Hilt is used for Dependency Injection, facilitating easier management of dependencies throughout the app.
+- **Local Storage**: Room is utilized for local storage, enabling efficient storage and retrieval of recipe data on the device.
+- **Image Loading**: Coil library is employed for image loading, providing smooth and efficient loading of recipe images.
+- **Asynchronous Programming**: Coroutine is used for asynchronous programming, allowing seamless execution of background tasks without blocking the main thread.
+- **Paging Library**: Paging library is used for efficient pagination of recipe data, providing smooth scrolling and optimized memory usage.
+- **Jetpack Compose UI**: Recipe Discover's user interface is built using Jetpack Compose, offering a modern and intuitive user experience.
+- **API Calling**: Retrofit is used for making API calls to retrieve recipe data from remote servers.
 
 ## Screenshots
 ![Screenshot_20240513_115244_Recipe APP](https://github.com/Mayur228/Recipe-App/assets/87631098/a6f1e89f-f0a1-4e07-935b-dc9b847a05ed)
@@ -25,6 +26,7 @@ Jetpack Compose UI: Recipe Discover's user interface is built using Jetpack Comp
 ## Acknowledgements
 Recipe Discover utilizes the following open-source libraries:
 
+- Retrofit for API calling
 - Hilt for Dependency Injection
 - Room for local storage
 - Coil for image loading
