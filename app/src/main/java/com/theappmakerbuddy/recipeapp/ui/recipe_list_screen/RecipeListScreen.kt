@@ -71,8 +71,6 @@ import com.theappmakerbuddy.recipeapp.core.MyPadding
 import com.theappmakerbuddy.recipeapp.core.Screen
 import com.theappmakerbuddy.recipeapp.core.lemonMilkFonts
 import kotlinx.coroutines.flow.collectLatest
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -245,7 +243,7 @@ fun RecipeListUi(
                                             value = searchBoxState,
                                             onValueChange = viewModel::onSearchBoxValueChanged,
                                             modifier = Modifier.fillMaxWidth(),
-                                            label = {
+                                            placeholder = {
                                                 Text("Search ${viewModel.category.value} recipes", color = Color.Black)
                                             },
                                             keyboardActions = KeyboardActions(onSearch = {
