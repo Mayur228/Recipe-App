@@ -1,5 +1,6 @@
 package com.theappmakerbuddy.recipeapp.data.remote.custom
 
+import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 import retrofit2.Invocation
@@ -13,7 +14,7 @@ class ApiKeyInterceptor : Interceptor {
         return if (apiKeyAnnotation != null) {
             val apiKey = apiKeyAnnotation.value
             val newRequest = request.newBuilder()
-                .addHeader("apiKey", apiKey)
+                .addHeader("x-api-key", apiKey)
                 .build()
             chain.proceed(newRequest)
         } else {

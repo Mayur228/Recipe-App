@@ -1,5 +1,6 @@
 package com.theappmakerbuddy.recipeapp.data.remote.repository
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -262,9 +263,10 @@ class RecipeRepositoryImpl @Inject constructor(
 //                it.toRecipeDtoItem()
 //            }
             val recipes = recipeApi.getRandomRecipe(6)
+            Log.e("CHECK",recipes.recipes.toString())
             return Resource.Success(data = recipes.recipes)
         } catch (e: Exception) {
-            return Resource.Error(error = "unable to find top recipes")
+            return Resource.Error(error = e.message.toString())
         }
     }
 

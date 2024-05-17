@@ -1,5 +1,7 @@
 package com.theappmakerbuddy.recipeapp.ui.categories_screen
 
+import android.widget.ImageView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,12 +19,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
+import com.theappmakerbuddy.recipeapp.R
 import com.theappmakerbuddy.recipeapp.core.MyPadding
 import com.theappmakerbuddy.recipeapp.core.Screen
 import com.theappmakerbuddy.recipeapp.core.lemonMilkFonts
@@ -30,6 +34,7 @@ import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDto
 import okhttp3.internal.immutableListOf
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+
 /*
 @Composable
 fun CategoriesScreen(
@@ -107,36 +112,21 @@ fun CategoryItem(
     modifier: Modifier = Modifier,
     categoryDto: CategoryDto,
 ) {
-    Box(modifier = modifier
-        .padding(8.dp)
-        .graphicsLayer {
-            shape = RoundedCornerShape(MyPadding.medium)
-            clip = true
-        }
+    Card(
+        backgroundColor = Color.White,
+        shape = RoundedCornerShape(MyPadding.medium),
+        modifier = modifier.padding(8.dp)
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .align(Alignment.BottomCenter)
-            .drawBehind {
-                drawRect(Brush.verticalGradient(colors = immutableListOf(Color.Transparent,
-                    Color.Black)), alpha = 0.7f)
-            }
+        Text(
+            text = categoryDto.name,
+            fontFamily = lemonMilkFonts,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MyPadding.small),
+            textAlign = TextAlign.Center,
+            color = Color.Black
         )
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = categoryDto.name,
-                fontFamily = lemonMilkFonts,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(MyPadding.small),
-                textAlign = TextAlign.Center
-            )
-        }
     }
+
 }

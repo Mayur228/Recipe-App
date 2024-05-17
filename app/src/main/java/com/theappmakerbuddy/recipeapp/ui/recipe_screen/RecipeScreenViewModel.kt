@@ -22,7 +22,7 @@ class RecipeScreenViewModel @Inject constructor(
 //    private val useCaseSaveRecipe: UseCaseSaveRecipe,
 //    private val useCaseGetRecipeSavedStatus: UseCaseGetRecipeSavedStatus
 ) : ViewModel() {
-    private val _recipeState = mutableStateOf<RecipeScreenState>(RecipeScreenState())
+    private val _recipeState = mutableStateOf(RecipeScreenState())
     val recipeState: State<RecipeScreenState> = _recipeState
 
     private val _uiRecipeScreenEvents: Channel<RecipeScreenEvents> = Channel()

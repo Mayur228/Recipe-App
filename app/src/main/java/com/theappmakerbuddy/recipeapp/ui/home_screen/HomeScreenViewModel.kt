@@ -1,5 +1,6 @@
 package com.theappmakerbuddy.recipeapp.ui.home_screen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +48,7 @@ class HomeScreenViewModel @Inject constructor(
         when (val recipeState = recipeRepository.getTopRecipe()) {
             is Resource.Error -> {
                 topRecipesState.value =
-                    topRecipesState.value.copy(error = "unable to load recipes", loading = false)
+                    topRecipesState.value.copy(error = recipeState.error.toString(), loading = false)
             }
             is Resource.Loading -> {
                 topRecipesState.value = topRecipesState.value.copy(error = "", loading = true)
@@ -79,12 +80,6 @@ class HomeScreenViewModel @Inject constructor(
     fun sendUiEvents(event: HomeScreenUiEvents){
         viewModelScope.launch {
             when(event){
-                HomeScreenUiEvents.CloseNavDrawer -> {
-                    _uiEvents.send(HomeScreenUiEvents.CloseNavDrawer)
-                }
-                HomeScreenUiEvents.OpenNavDrawer -> {
-                    _uiEvents.send(HomeScreenUiEvents.OpenNavDrawer)
-                }
                 HomeScreenUiEvents.NavigateUp -> {
                     _uiEvents.send(HomeScreenUiEvents.NavigateUp)
                 }
@@ -94,15 +89,18 @@ class HomeScreenViewModel @Inject constructor(
                 HomeScreenUiEvents.NavigateToCategoriesScreen -> {
                     _uiEvents.send(HomeScreenUiEvents.NavigateToCategoriesScreen)
                 }
+
+                HomeScreenUiEvents.NavigateToFavorite -> {
+                    _uiEvents.send(HomeScreenUiEvents.NavigateToFavorite)
+                }
             }
         }
     }
 }
 
 sealed interface HomeScreenUiEvents{
-    object CloseNavDrawer: HomeScreenUiEvents
-    object OpenNavDrawer: HomeScreenUiEvents
     object NavigateUp: HomeScreenUiEvents
     object NavigateToSearchRecipesScreen: HomeScreenUiEvents
     object NavigateToCategoriesScreen: HomeScreenUiEvents
+    object NavigateToFavorite: HomeScreenUiEvents
 }

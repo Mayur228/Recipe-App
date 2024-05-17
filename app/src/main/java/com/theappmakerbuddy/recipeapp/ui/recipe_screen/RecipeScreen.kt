@@ -39,6 +39,8 @@ import com.theappmakerbuddy.recipeapp.ui.recipe_screen.components.ingredientToPD
 import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -223,20 +225,17 @@ fun RecipeScreen(
                         Spacer(modifier = Modifier.height(MyPadding.medium))
                     }
 
+                    items(screenState.recipe?.extendedIngredients ?: emptyList()) { ingredient ->
 
-//                    items(ingredients) { ingredient ->
-//                        val ingredientQuantity = ingredient.quantity.toFloatOrNull()
-//                            ?.times(viewModel.numberOfPersons.value)
-//                        val modifiedIngredient = ingredientQuantity ?: ""
-//                        Text(
-//                            text = " ${modifiedIngredient}${ingredient.description}",
-//                            fontFamily = lemonMilkFonts,
-//                            fontWeight = FontWeight.Normal,
-//                            style = MaterialTheme.typography.body1,
-//                            modifier = Modifier.padding(horizontal = MyPadding.medium)
-//                        )
-//                        Spacer(modifier = Modifier.height(MyPadding.medium))
-//                    }
+                        Text(
+                            text = " ${ingredient.name} ${ingredient.amount} ${ingredient.unit}",
+                            fontFamily = lemonMilkFonts,
+                            fontWeight = FontWeight.Normal,
+                            style = MaterialTheme.typography.body1,
+                            modifier = Modifier.padding(horizontal = MyPadding.medium)
+                        )
+                        Spacer(modifier = Modifier.height(MyPadding.medium))
+                    }
 
                     item {
                         Text(
@@ -249,16 +248,17 @@ fun RecipeScreen(
                         Spacer(modifier = Modifier.height(MyPadding.medium))
                     }
 
-//                    items(screenState.recipe.method) { method ->
-//                        Text(
-//                            text = method,
-//                            fontFamily = lemonMilkFonts,
-//                            fontWeight = FontWeight.Normal,
-//                            style = MaterialTheme.typography.body1,
-//                            modifier = Modifier.padding(horizontal = MyPadding.medium)
-//                        )
-//                        Spacer(modifier = Modifier.height(MyPadding.medium))
-//                    }
+                    item {
+                        Text(
+                            text = screenState.recipe?.summary ?: "",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.ExtraLight,
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colors.onSurface,
+                            fontFamily = lemonMilkFonts,
+                            modifier = Modifier.padding(horizontal = MyPadding.medium)
+                        )
+                    }
                 }
             }
         }
@@ -317,37 +317,6 @@ fun exportPdf(context: Context, ingredients: List<Ingredient>, viewModel: Recipe
             Toast.makeText(context,
                 "unable to save file",
                 Toast.LENGTH_LONG).show()
-        }
-    }
-}
-
-@Composable
-fun NumberOfPersonSlider(
-    modifier: Modifier = Modifier,
-    currentValue: Int,
-    onValueChanged: (Float) -> Unit,
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = "Number of persons",
-            fontWeight = FontWeight.Medium,
-            fontFamily = lemonMilkFonts,
-            style = MaterialTheme.typography.h5)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Slider(
-                value = currentValue.toFloat() / 10f,
-                onValueChange = onValueChanged,
-                modifier = Modifier.fillMaxWidth(0.75f),
-                colors = SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colors.primaryVariant,
-                    activeTrackColor = MaterialTheme.colors.primaryVariant,
-                )
-            )
-            Spacer(modifier = Modifier.width(MyPadding.small))
-            Text(text = "$currentValue", modifier = Modifier.fillMaxWidth())
         }
     }
 }

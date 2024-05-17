@@ -12,11 +12,11 @@ import retrofit2.http.Query
 interface RecipeApi {
 
     @ApiKey
-    @GET("/random")
+    @GET("recipes/random")
     suspend fun getRandomRecipe(@Query("number") number: Int): RecipeDto
 
     @ApiKey
-    @GET("/complexSearch")
+    @GET("recipes/complexSearch")
     suspend fun getRecipeByCategory(
         @Query("type") type: RecipeType,
         @Query("query") query: String,
@@ -25,7 +25,7 @@ interface RecipeApi {
     ): SearchRecipeDto
 
     @ApiKey
-    @GET("/complexSearch")
+    @GET("recipes/complexSearch")
     suspend fun searchRecipe(
         @Query("query") query: String,
         @Query("offset") offset: Int,
@@ -39,10 +39,4 @@ interface RecipeApi {
 //        @Query("includeNutrition") includeNutrition: Boolean,
     ): RecipeDetailDto
 
-
-//    @GET("{recipe}.json")
-//    suspend fun getRecipeList(@Path("recipe") recipe: String): RecipeDto
-//
-//    @GET("category.json")
-//    suspend fun getCategory(): CategoryDto
 }

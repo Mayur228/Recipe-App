@@ -26,9 +26,6 @@ interface RecipeDao{
     @Query("SELECT * FROM recipeentity WHERE title = :recipeTitle")
     suspend fun getRecipeByTitle(recipeTitle: String): RecipeEntity?
 
-    @Query("SELECT * FROM recipeentity WHERE tag LIKE '%' || :category ||  '%'  AND LOWER(title) LIKE '%' || LOWER(:recipe) || '%' ")
-    suspend fun getRecipeByTag(category: String, recipe: String): List<RecipeEntity>
-
     @Insert(entity = LocalRecipeEntity::class, onConflict = REPLACE)
     suspend fun saveRecipe(localRecipeEntity: LocalRecipeEntity)
 
