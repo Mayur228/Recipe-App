@@ -48,8 +48,6 @@ fun RecipeScreen(
 ) {
     val screenState = viewModel.recipeState.value
     val scaffoldState = rememberScaffoldState()
-    val numberOfPersons = viewModel.numberOfPersons.value
-    val ingredients = screenState.recipe.ingredient
     val favoriteButtonState = viewModel.favouriteState.value
     val multiplePermissionState =
         rememberMultiplePermissionsState(permissions = listOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -139,7 +137,7 @@ fun RecipeScreen(
                             }
 
                             SubcomposeAsyncImage(
-                                model = screenState.recipe.imageUrl,
+                                model = screenState.recipe?.image,
                                 loading = {
                                     CircularProgressIndicator(
                                         modifier = Modifier.size(50.dp),
@@ -159,7 +157,7 @@ fun RecipeScreen(
                                 filterQuality = FilterQuality.Medium
                             )
                             Text(
-                                text = screenState.recipe.title,
+                                text = screenState.recipe?.title ?: "",
                                 style = MaterialTheme.typography.h4,
                                 fontWeight = FontWeight.ExtraLight,
                                 textAlign = TextAlign.Center,
@@ -185,10 +183,10 @@ fun RecipeScreen(
                                         } else if (!multiplePermissionState.allPermissionsGranted) {
                                             multiplePermissionState.launchMultiplePermissionRequest()
                                         } else {
-                                            exportPdf(context = context,
-                                                ingredients = ingredients,
-                                                viewModel = viewModel,
-                                                name = screenState.recipe.title)
+//                                            exportPdf(context = context,
+//                                                ingredients = ingredients,
+//                                                viewModel = viewModel,
+//                                                name = screenState.recipe.title)
                                         }
 
                                     }
@@ -201,10 +199,10 @@ fun RecipeScreen(
                                 } else if (!multiplePermissionState.allPermissionsGranted) {
                                     multiplePermissionState.launchMultiplePermissionRequest()
                                 } else {
-                                    exportPdf(context = context,
-                                        ingredients = ingredients,
-                                        viewModel = viewModel,
-                                        name = screenState.recipe.title)
+//                                    exportPdf(context = context,
+//                                        ingredients = ingredients,
+//                                        viewModel = viewModel,
+//                                        name = screenState.recipe.title)
                                 }
                             }) {
                                 Icon(imageVector = Icons.Default.DownloadForOffline,
@@ -212,17 +210,6 @@ fun RecipeScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(MyPadding.medium))
-                    }
-
-                    item {
-                        NumberOfPersonSlider(
-                            currentValue = numberOfPersons,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = MyPadding.medium)
-                        ) {
-                            viewModel.onSliderValueChanged(it)
-                        }
                     }
 
                     item {
@@ -237,19 +224,19 @@ fun RecipeScreen(
                     }
 
 
-                    items(ingredients) { ingredient ->
-                        val ingredientQuantity = ingredient.quantity.toFloatOrNull()
-                            ?.times(viewModel.numberOfPersons.value)
-                        val modifiedIngredient = ingredientQuantity ?: ""
-                        Text(
-                            text = " ${modifiedIngredient}${ingredient.description}",
-                            fontFamily = lemonMilkFonts,
-                            fontWeight = FontWeight.Normal,
-                            style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(horizontal = MyPadding.medium)
-                        )
-                        Spacer(modifier = Modifier.height(MyPadding.medium))
-                    }
+//                    items(ingredients) { ingredient ->
+//                        val ingredientQuantity = ingredient.quantity.toFloatOrNull()
+//                            ?.times(viewModel.numberOfPersons.value)
+//                        val modifiedIngredient = ingredientQuantity ?: ""
+//                        Text(
+//                            text = " ${modifiedIngredient}${ingredient.description}",
+//                            fontFamily = lemonMilkFonts,
+//                            fontWeight = FontWeight.Normal,
+//                            style = MaterialTheme.typography.body1,
+//                            modifier = Modifier.padding(horizontal = MyPadding.medium)
+//                        )
+//                        Spacer(modifier = Modifier.height(MyPadding.medium))
+//                    }
 
                     item {
                         Text(
@@ -262,16 +249,16 @@ fun RecipeScreen(
                         Spacer(modifier = Modifier.height(MyPadding.medium))
                     }
 
-                    items(screenState.recipe.method) { method ->
-                        Text(
-                            text = method,
-                            fontFamily = lemonMilkFonts,
-                            fontWeight = FontWeight.Normal,
-                            style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(horizontal = MyPadding.medium)
-                        )
-                        Spacer(modifier = Modifier.height(MyPadding.medium))
-                    }
+//                    items(screenState.recipe.method) { method ->
+//                        Text(
+//                            text = method,
+//                            fontFamily = lemonMilkFonts,
+//                            fontWeight = FontWeight.Normal,
+//                            style = MaterialTheme.typography.body1,
+//                            modifier = Modifier.padding(horizontal = MyPadding.medium)
+//                        )
+//                        Spacer(modifier = Modifier.height(MyPadding.medium))
+//                    }
                 }
             }
         }
@@ -288,7 +275,7 @@ fun exportPdf(context: Context, ingredients: List<Ingredient>, viewModel: Recipe
         val values = ContentValues()
         // save to a folder
         values.put(MediaStore.MediaColumns.DISPLAY_NAME,
-            "${viewModel.recipeState.value.recipe.title}.pdf")
+            "${viewModel.recipeState.value.recipe?.title}.pdf")
         values.put(MediaStore.MediaColumns.MIME_TYPE,
             "application/pdf")
         values.put(MediaStore.MediaColumns.RELATIVE_PATH,
@@ -301,7 +288,7 @@ fun exportPdf(context: Context, ingredients: List<Ingredient>, viewModel: Recipe
         try {
             pdfDocument.writeTo(outputStream)
             Toast.makeText(context,
-                "file saved successfully at Downloads/recipeapp/${viewModel.recipeState.value.recipe.title}.pdf",
+                "file saved successfully at Downloads/recipeapp/${viewModel.recipeState.value.recipe?.title}.pdf",
                 Toast.LENGTH_LONG).show()
             Log.d("Check",
                 "file saved successfully at ${uri}")

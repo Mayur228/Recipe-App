@@ -1,3 +1,5 @@
 package com.theappmakerbuddy.recipeapp.data.remote.dto.recipes
 
-class RecipeDto : ArrayList<RecipeDtoItem>()
+data class RecipeDto(
+    val recipes: List<RecipeDtoItem>
+)

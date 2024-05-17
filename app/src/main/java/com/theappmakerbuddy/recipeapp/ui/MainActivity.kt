@@ -14,7 +14,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.theappmakerbuddy.recipeapp.core.Constants
 import com.theappmakerbuddy.recipeapp.core.Screen
-import com.theappmakerbuddy.recipeapp.ui.categories_screen.CategoriesScreen
 import com.theappmakerbuddy.recipeapp.ui.home_screen.HomeScreen
 import com.theappmakerbuddy.recipeapp.ui.recipe_list_screen.RecipeListScreen
 import com.theappmakerbuddy.recipeapp.ui.recipe_screen.RecipeScreen
@@ -75,11 +74,11 @@ class MainActivity : ComponentActivity() {
                           RecipeListScreen(navController = navController)
                       }
 
-                      composable(route = Screen.CategoriesScreen.route){
-                          CategoriesScreen(
-                              navController = navController
-                          )
-                      }
+//                      composable(route = Screen.CategoriesScreen.route){
+//                          CategoriesScreen(
+//                              navController = navController
+//                          )
+//                      }
                   }
               }
             }

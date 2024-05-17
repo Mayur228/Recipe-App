@@ -212,13 +212,13 @@ fun HomeScreen(
                                             .height(170.dp)
                                             .padding(horizontal = MyPadding.medium)
                                             .clickable {
-                                                navController.navigate(Screen.RecipeScreen.route + "/${item.title}/${item.tag}/false") {
+                                                navController.navigate(Screen.RecipeScreen.route + "/${item.title}/${item.summary}/false") {
                                                     launchSingleTop = true
                                                 }
                                             }
                                     )
                                     {
-                                        SubcomposeAsyncImage(
+                                       /* SubcomposeAsyncImage(
                                             model = item.imageUrl,
                                             contentDescription = null,
                                             modifier = Modifier
@@ -236,7 +236,7 @@ fun HomeScreen(
                                                 )
                                             },
                                             filterQuality = FilterQuality.Medium,
-                                        )
+                                        )*/
                                         Spacer(modifier = Modifier.width(MyPadding.small))
                                         Text(
                                             text = item.title,
@@ -284,27 +284,20 @@ fun CategoriesContent(
                     modifier = Modifier.align(
                         Alignment.Center))
             }
-            categoriesListState.error.isNotBlank() -> {
-                Text(text = categoriesListState.error,
-                    style = MaterialTheme.typography.subtitle2,
-                    color = MaterialTheme.colors.secondary,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
             else -> {
                 LazyVerticalGrid(columns = GridCells.Fixed(2),
                     state = lazyGridState,
                     contentPadding = PaddingValues(4.dp)) {
                     items(categoriesListState.categories) { category ->
                         CategoryItem(
-                            categoryDtoItem = category,
+                            categoryDto = category,
                             modifier = Modifier
                                 .size(200.dp)
                                 .clickable {
                                     navController.navigate(
-                                        route = Screen.RecipeListScreen.route + "/${category.category}/${
+                                        route = Screen.RecipeListScreen.route + "/${category.name}/${
                                             URLEncoder.encode(
-                                                category.imageUrl,
+                                                category.name,
                                                 StandardCharsets.UTF_8.toString()
                                             )
                                         }/false"

@@ -1,13 +1,27 @@
 package com.theappmakerbuddy.recipeapp.domain.repository
 
+import androidx.paging.PagingData
 import com.theappmakerbuddy.recipeapp.core.Resource
-import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDtoItem
+import com.theappmakerbuddy.recipeapp.data.remote.custom.RecipeType
+import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDto
+import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDetailDto
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDtoItem
-import com.theappmakerbuddy.recipeapp.domain.model.ModelLocalRecipe
+import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.SearchRecipeDtoItem
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
-    suspend fun getRecipes(
+    suspend fun getTopRecipe(): Resource<List<RecipeDtoItem>>
+
+    suspend fun getRecipeByCategory(type: RecipeType): Flow<Resource<PagingData<SearchRecipeDtoItem>>>
+
+    suspend fun searchRecipe(query: String): Flow<Resource<PagingData<SearchRecipeDtoItem>>>
+
+    suspend fun getRecipeDetails(recipeId: Int): Resource<RecipeDetailDto>
+
+    fun getCategory(): Resource<List<CategoryDto>>
+
+
+   /* suspend fun getRecipes(
         recipe: String,
         page: Int,
         pageSize: Int,
@@ -35,5 +49,5 @@ interface RecipeRepository {
 
     suspend fun getLocalRecipeByTitle(title: String): Resource<ModelLocalRecipe?>
 
-    suspend fun deleteSelectedSavedRecipes(recipeTitles: List<String>): String
+    suspend fun deleteSelectedSavedRecipes(recipeTitles: List<String>): String*/
 }

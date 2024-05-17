@@ -5,12 +5,14 @@ import androidx.room.Room
 import com.theappmakerbuddy.recipeapp.core.Constants
 import com.theappmakerbuddy.recipeapp.data.local.RecipeDatabase
 import com.theappmakerbuddy.recipeapp.data.remote.RecipeApi
+import com.theappmakerbuddy.recipeapp.data.remote.custom.ApiKeyInterceptor
 import com.theappmakerbuddy.recipeapp.data.remote.repository.RecipeRepositoryImpl
 import com.theappmakerbuddy.recipeapp.domain.repository.RecipeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -24,6 +26,10 @@ object AppModule {
     fun providesRecipeApi(): RecipeApi = Retrofit
         .Builder()
         .baseUrl(Constants.BASE_URL)
+        .client(
+            OkHttpClient.Builder()
+            .addInterceptor(ApiKeyInterceptor())
+            .build())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RecipeApi::class.java)

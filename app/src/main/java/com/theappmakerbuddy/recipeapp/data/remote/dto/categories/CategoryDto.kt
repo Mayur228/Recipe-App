@@ -1,3 +1,7 @@
 package com.theappmakerbuddy.recipeapp.data.remote.dto.categories
 
-class CategoryDto : ArrayList<CategoryDtoItem>()
+import com.theappmakerbuddy.recipeapp.data.remote.custom.RecipeType
+
+data class CategoryDto(
+    val name: String,
+)

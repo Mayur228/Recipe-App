@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -27,11 +26,11 @@ import coil.compose.SubcomposeAsyncImage
 import com.theappmakerbuddy.recipeapp.core.MyPadding
 import com.theappmakerbuddy.recipeapp.core.Screen
 import com.theappmakerbuddy.recipeapp.core.lemonMilkFonts
-import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDtoItem
+import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDto
 import okhttp3.internal.immutableListOf
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-
+/*
 @Composable
 fun CategoriesScreen(
     navController: NavHostController,
@@ -88,7 +87,7 @@ fun CategoriesScreen(
                                         navController.navigate(
                                             route = Screen.RecipeListScreen.route + "/${category.category}/${
                                                 URLEncoder.encode(
-                                                    category.imageUrl,
+                                                    category.name,
                                                     StandardCharsets.UTF_8.toString()
                                                 )
                                             }/false"
@@ -101,12 +100,12 @@ fun CategoriesScreen(
             }
         }
     }
-}
+}*/
 
 @Composable
 fun CategoryItem(
     modifier: Modifier = Modifier,
-    categoryDtoItem: CategoryDtoItem,
+    categoryDto: CategoryDto,
 ) {
     Box(modifier = modifier
         .padding(8.dp)
@@ -115,13 +114,6 @@ fun CategoryItem(
             clip = true
         }
     ) {
-        SubcomposeAsyncImage(
-            model = categoryDtoItem.imageUrl,
-            contentDescription = "category",
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
@@ -137,7 +129,7 @@ fun CategoryItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = categoryDtoItem.category,
+                text = categoryDto.name,
                 fontFamily = lemonMilkFonts,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier

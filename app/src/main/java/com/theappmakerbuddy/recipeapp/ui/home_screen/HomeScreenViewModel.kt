@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theappmakerbuddy.recipeapp.core.Resource
+import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDto
 import com.theappmakerbuddy.recipeapp.domain.repository.RecipeRepository
 import com.theappmakerbuddy.recipeapp.ui.home_screen.components.ComponentCategoriesState
 import com.theappmakerbuddy.recipeapp.ui.home_screen.components.ComponentTopRecipesState
@@ -37,13 +38,13 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            async { loadTopRecipes(fetchFromRemote = false) }
+            async { loadTopRecipes() }
             async { loadCategories() }
         }
     }
 
-    private suspend fun loadTopRecipes(fetchFromRemote: Boolean) {
-        when (val recipeState = recipeRepository.getFirstFourRecipes(fetchFromRemote = fetchFromRemote)) {
+    private suspend fun loadTopRecipes() {
+        when (val recipeState = recipeRepository.getTopRecipe()) {
             is Resource.Error -> {
                 topRecipesState.value =
                     topRecipesState.value.copy(error = "unable to load recipes", loading = false)
@@ -55,29 +56,24 @@ class HomeScreenViewModel @Inject constructor(
                 topRecipesState.value = topRecipesState.value.copy(
                     error = "",
                     loading = false,
-                    recipes = recipeState.data!!
+                    recipes = recipeState.data ?: emptyList()
                 )
             }
         }
     }
 
-    private suspend fun loadCategories() {
-        recipeRepository.getCategories().collectLatest { result ->
-            when (result) {
-                is Resource.Error -> {
-                    _categoriesState.value = _categoriesState.value.copy(
-                        isLoading = false,
-                        error = result.error ?: "unable to load categories please try again later"
-                    )
-                }
-                is Resource.Loading -> {
-                    _categoriesState.value = _categoriesState.value.copy(isLoading = true)
-                }
-                is Resource.Success -> {
-                    _categoriesState.value = _categoriesState.value.copy(isLoading = false, categories = result.data ?: emptyList())
-                }
+    private fun loadCategories() {
+        when(val categoryState = recipeRepository.getCategory()) {
+            is Resource.Error -> TODO()
+            is Resource.Loading -> TODO()
+            is Resource.Success -> {
+                _categoriesState.value = _categoriesState.value.copy(
+                    isLoading = false,
+                    categories = categoryState.data ?: emptyList()
+                )
             }
         }
+
     }
 
     fun sendUiEvents(event: HomeScreenUiEvents){

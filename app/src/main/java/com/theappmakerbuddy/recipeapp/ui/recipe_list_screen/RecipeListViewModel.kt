@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theappmakerbuddy.recipeapp.core.Constants
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDtoItem
-import com.theappmakerbuddy.recipeapp.domain.pagination.RecipePaginator
 import com.theappmakerbuddy.recipeapp.domain.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -51,7 +50,7 @@ class RecipeListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            loadNextItems()
+//            loadNextItems()
         }
     }
 
@@ -60,59 +59,59 @@ class RecipeListViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500L)
-            searchRecipe(_searchBoxState.value).reset()
+//            searchRecipe(_searchBoxState.value).reset()
             state = state.copy(page = 0, items = emptyList())
-            searchRecipe(_searchBoxState.value).loadNextItems()
+//            searchRecipe(_searchBoxState.value).loadNextItems()
         }
     }
 
-    suspend fun loadNextItems() {
-        searchRecipe(searchBoxState.value).loadNextItems()
-    }
+    /* suspend fun loadNextItems() {
+         searchRecipe(searchBoxState.value).loadNextItems()
+     }
 
-    private fun searchRecipe(recipe: String): RecipePaginator<Int, RecipeDtoItem> {
-        return RecipePaginator<Int, RecipeDtoItem>(
-            initialKey = state.page,
-            onLoadUpdated = {
-                state = state.copy(isLoading = it)
-            },
-            onRequest = { nextPage ->
-                recipeRepository.getRecipesByCategory(
-                    category = category.value,
-                    page = state.page,
-                    pageSize = 20,
-                    fetchFromRemote = false,
-                    recipe = recipe,
-                    getSavedRecipes = getSavedRecipes.value
-                )
-            },
-            getNextKey = { items ->
-                state.page + 1
-            },
-            onError = { throwable ->
-                state = state.copy(
-                    error = throwable?.localizedMessage
-                        ?: "unable to load items, please try again later",
-                    isLoading = false
-                )
-            }
-        ) { newItems, newKey ->
-            state = state.copy(
-                items = state.items + newItems,
-                page = newKey,
-                endReached = newItems.isEmpty(),
-            )
-        }
-    }
+     private fun searchRecipe(recipe: String): RecipePaginator<Int, RecipeDtoItem> {
+         return RecipePaginator<Int, RecipeDtoItem>(
+             initialKey = state.page,
+             onLoadUpdated = {
+                 state = state.copy(isLoading = it)
+             },
+             onRequest = { nextPage ->
+                 recipeRepository.getRecipesByCategory(
+                     category = category.value,
+                     page = state.page,
+                     pageSize = 20,
+                     fetchFromRemote = false,
+                     recipe = recipe,
+                     getSavedRecipes = getSavedRecipes.value
+                 )
+             },
+             getNextKey = { items ->
+                 state.page + 1
+             },
+             onError = { throwable ->
+                 state = state.copy(
+                     error = throwable?.localizedMessage
+                         ?: "unable to load items, please try again later",
+                     isLoading = false
+                 )
+             }
+         ) { newItems, newKey ->
+             state = state.copy(
+                 items = state.items + newItems,
+                 page = newKey,
+                 endReached = newItems.isEmpty(),
+             )
+         }
+     }*/
 
     fun onClearSearchBoxButtonClicked() {
         _searchBoxState.value = ""
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             state = state.copy(page = 0, items = emptyList())
-            val paginator = searchRecipe("")
-            paginator.reset()
-            paginator.loadNextItems()
+//            val paginator = searchRecipe("")
+//            paginator.reset()
+//            paginator.loadNextItems()
         }
     }
 
@@ -137,7 +136,7 @@ class RecipeListViewModel @Inject constructor(
         }
     }
 
-    fun receiveFromRecipeListScreenEvents(event: FromRecipeListScreenEvents){
+   /* fun receiveFromRecipeListScreenEvents(event: FromRecipeListScreenEvents){
         viewModelScope.launch {
             when(event){
                 FromRecipeListScreenEvents.DisableEditMode -> {
@@ -154,7 +153,7 @@ class RecipeListViewModel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 }
 
 sealed interface ToRecipeListScreenEvents{

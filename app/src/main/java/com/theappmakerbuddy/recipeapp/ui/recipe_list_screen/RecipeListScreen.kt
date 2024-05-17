@@ -98,7 +98,7 @@ fun RecipeListScreen(
 
     BackHandler {
         if (isEditModeOn) {
-            viewModel.receiveFromRecipeListScreenEvents(FromRecipeListScreenEvents.DisableEditMode)
+//            viewModel.receiveFromRecipeListScreenEvents(FromRecipeListScreenEvents.DisableEditMode)
         } else {
             viewModel.onEvent(ToRecipeListScreenEvents.NavigateUp)
         }
@@ -109,9 +109,9 @@ fun RecipeListScreen(
     if (viewModel.getSavedRecipes.value) {
         SwipeRefresh(state = refreshState, onRefresh = {
             if (viewModel.getSavedRecipes.value) {
-                viewModel.receiveFromRecipeListScreenEvents(FromRecipeListScreenEvents.ChangeRefreshState)
+//                viewModel.receiveFromRecipeListScreenEvents(FromRecipeListScreenEvents.ChangeRefreshState)
                 viewModel.onClearSearchBoxButtonClicked()
-                viewModel.receiveFromRecipeListScreenEvents(FromRecipeListScreenEvents.ChangeRefreshState)
+//                viewModel.receiveFromRecipeListScreenEvents(FromRecipeListScreenEvents.ChangeRefreshState)
             }
         }) {
             RecipeListUi(
@@ -195,9 +195,9 @@ fun RecipeListUi(
                         AnimatedVisibility(visible = isEditModeOn) {
                             IconButton(
                                 onClick = {
-                                    viewModel.receiveFromRecipeListScreenEvents(
-                                        FromRecipeListScreenEvents.DeleteButtonClicked
-                                    )
+//                                    viewModel.receiveFromRecipeListScreenEvents(
+//                                        FromRecipeListScreenEvents.DeleteButtonClicked
+//                                    )
                                 },
                                 modifier = Modifier.padding(MyPadding.small)
                             ) {
@@ -287,7 +287,7 @@ fun RecipeListUi(
 
                 LaunchedEffect(key1 = Unit) {
                     if (index >= state.items.size - 5 && !state.endReached && !state.isLoading) {
-                        viewModel.loadNextItems()
+//                        viewModel.loadNextItems()
                     }
                 }
                 Column(
@@ -302,8 +302,7 @@ fun RecipeListUi(
                         }) {
                             if (!isEditModeOn) {
                                 val title = item.title
-                                val tag = item.tag
-                                navController.navigate(Screen.RecipeScreen.route + "/${title}/${tag}/${viewModel.getSavedRecipes.value}") {
+                                navController.navigate(Screen.RecipeScreen.route + "/${title}/${"name"}/${viewModel.getSavedRecipes.value}") {
                                     launchSingleTop = true
                                 }
                             } else {
@@ -312,7 +311,7 @@ fun RecipeListUi(
                         }
                 ) {
                     SubcomposeAsyncImage(
-                        model = item.imageUrl,
+                        model = item.image,
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()

@@ -5,6 +5,7 @@ import com.theappmakerbuddy.recipeapp.domain.repository.RecipeRepository
 import com.theappmakerbuddy.recipeapp.ui.recipe_screen.RecipeSaveState
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
+/*
 
 class UseCaseGetRecipeSavedStatus @Inject constructor(private val recipeRepository: RecipeRepository) {
     suspend operator fun invoke(title: String): Flow<RecipeSaveState> = flow {
@@ -25,4 +26,4 @@ class UseCaseGetRecipeSavedStatus @Inject constructor(private val recipeReposito
             }
         }
     }
-}
+}*/

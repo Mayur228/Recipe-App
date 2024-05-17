@@ -2,20 +2,19 @@ package com.theappmakerbuddy.recipeapp.domain.pagination
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.theappmakerbuddy.recipeapp.data.remote.RecipeApi
-import com.theappmakerbuddy.recipeapp.data.remote.custom.RecipeType
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.SearchRecipeDtoItem
 import retrofit2.HttpException
 import java.io.IOException
 
-class RecipePagingSource(
+class SearchRecipePagingSource(
     private val recipeApi: RecipeApi,
-    private val type: RecipeType,
+    private val query: String,
 ) : PagingSource<Int, SearchRecipeDtoItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SearchRecipeDtoItem> {
         val position = params.key ?: 0
         return try {
-            val response = recipeApi.getRecipeByCategory(type,"",position, params.loadSize)
+            val response = recipeApi.searchRecipe(query,position, params.loadSize)
             LoadResult.Page(
                 data = response.results,
                 prevKey = if (position == 0) null else position - params.loadSize,
