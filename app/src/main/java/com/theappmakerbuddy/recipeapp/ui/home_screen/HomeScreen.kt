@@ -23,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,7 +74,8 @@ fun HomeScreen(
             showBackArrow = false,
             navActions = {
                 IconButton(onClick = {
-                    viewModel.sendUiEvents(HomeScreenUiEvents.NavigateToSearchRecipesScreen)
+//                    viewModel.sendUiEvents(HomeScreenUiEvents.NavigateToSearchRecipesScreen)
+                    navController.navigate(Screen.SearchScreen.route)
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_search),
@@ -88,6 +90,7 @@ fun HomeScreen(
             CategoriesContent(categoriesListState, topRecipesState, navController)
         }
     }
+
 }
 
 @Composable
@@ -135,7 +138,7 @@ fun CategoriesContent(
                                 .wrapContentSize()
                                 .padding(horizontal = MyPadding.medium)
                                 .clickable {
-                                    navController.navigate(Screen.RecipeScreen.route +"/${recipe.id}") {
+                                    navController.navigate(Screen.RecipeScreen.route + "/${recipe.id}") {
                                         launchSingleTop = true
                                     }
                                 }

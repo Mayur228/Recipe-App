@@ -40,8 +40,14 @@ class SearchScreenViewModel@Inject constructor(
     suspend fun getAllRecipes() {
         viewModelScope.launch {
             val allRecipe = recipeRepository.searchRecipe("")
-            when(allRecipe) {
+            allRecipe.collect {
+                when(it) {
+                    is Resource.Error -> TODO()
+                    is Resource.Loading -> TODO()
+                    is Resource.Success -> {
 
+                    }
+                }
             }
         }
     }
@@ -56,8 +62,8 @@ class SearchScreenViewModel@Inject constructor(
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query
 
-    private val _searchResults = MutableStateFlow<PagingData<SearchRecipeDtoItem>>(PagingData.empty())
-    val searchResults: StateFlow<PagingData<SearchRecipeDtoItem>> = _searchResults
+    private val _searchResults = MutableStateFlow<PagingData<SearchRecipeDtoItem>?>(PagingData.empty())
+    val searchResults: StateFlow<PagingData<SearchRecipeDtoItem>?> = _searchResults
 
     fun onQueryChanged(newQuery: String) {
         _query.value = newQuery
@@ -74,7 +80,9 @@ class SearchScreenViewModel@Inject constructor(
                     when (result) {
                         is Resource.Error -> TODO()
                         is Resource.Loading -> TODO()
-                        is Resource.Success ->  _searchResults.value = result.data ?: PagingData.empty()
+                        is Resource.Success -> {
+                            _searchResults.value = result.data ?: PagingData.empty()
+                        }
                     }
                 }
         }

@@ -12,7 +12,7 @@ class UseCaseSaveRecipe @Inject constructor (
         private val recipeRepository: RecipeRepository,
     ) {
     suspend operator fun invoke(recipeDtoItem: RecipeDtoItem): Flow<RecipeSaveState> = flow  {
-        val recipeFromDatabase = recipeRepository.getLocalRecipeByTitle(title = recipeDtoItem.title)
+        val recipeFromDatabase = recipeRepository.getSavedRecipes()
         when(recipeFromDatabase){
             is Resource.Error -> {
                 emit(RecipeSaveState.UNABLE_TO_SAVE)

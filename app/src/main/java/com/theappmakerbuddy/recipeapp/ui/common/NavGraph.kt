@@ -11,6 +11,7 @@ import com.theappmakerbuddy.recipeapp.core.Screen
 import com.theappmakerbuddy.recipeapp.ui.home_screen.HomeScreen
 import com.theappmakerbuddy.recipeapp.ui.recipe_list_screen.RecipeListScreen
 import com.theappmakerbuddy.recipeapp.ui.recipe_screen.RecipeScreen
+import com.theappmakerbuddy.recipeapp.ui.search_screen.SearchScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -49,6 +50,12 @@ fun NavGraph(navController: NavHostController) {
             )
         ) {
             RecipeListScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.SearchScreen.route
+        ){
+            SearchScreen(navController = navController)
         }
     }
 }

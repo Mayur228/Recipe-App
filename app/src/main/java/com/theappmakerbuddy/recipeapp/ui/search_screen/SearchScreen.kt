@@ -34,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.paging.LoadState
+import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
@@ -54,13 +56,13 @@ fun SearchScreen(
 
     val query by viewModel.query.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState(initial = PagingData.empty())
-//    val lazyPagingItems = searchResults.collectAsLazyPagingItems()
+    val lazyPagingItems = searchResults.collectAsLazyPagingItems()
 
     Scaffold(topBar = {
         StandardToolbar(
             title = {
                 Text(
-                    text = "Home",
+                    text = "Search",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Yellow,
@@ -70,6 +72,7 @@ fun SearchScreen(
             },
             modifier = Modifier.fillMaxWidth(),
             showBackArrow = true,
+            onBackArrowClicked = { navController.popBackStack() }
         )
     }) { padding ->
         Column(modifier = Modifier

@@ -7,6 +7,7 @@ import com.theappmakerbuddy.recipeapp.data.remote.dto.categories.CategoryDto
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDetailDto
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDtoItem
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.SearchRecipeDtoItem
+import com.theappmakerbuddy.recipeapp.domain.model.ModelLocalRecipe
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
@@ -19,6 +20,12 @@ interface RecipeRepository {
     suspend fun getRecipeDetails(recipeId: Int): Resource<RecipeDetailDto>
 
     fun getCategory(): Resource<List<CategoryDto>>
+
+    suspend fun getSavedRecipes(): Resource<List<ModelLocalRecipe>>
+
+    suspend fun saveRecipe(recipeDtoItem: RecipeDtoItem): Resource<String>
+
+    suspend fun deleteSelectedSavedRecipes(recipeTitles: List<String>): String
 
 
    /* suspend fun getRecipes(
