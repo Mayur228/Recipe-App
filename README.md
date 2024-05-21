@@ -1,10 +1,10 @@
 # Recipe Discover
-Recipe Discover is a recipe app designed to help users explore a vast collection of recipes conveniently. With Recipe Discover, users can browse recipes by category, search for specific recipes, and save their favorite recipes for easy access.
+Recipe Discover is a recipe app designed to help users explore a vast collection of recipes conveniently. With Recipe Discover, users can browse recipes by category, search for specific recipes, and save their favourite recipes for easy access.
 
 ## Features
 - **Browse by Category**: Users can explore recipes categorized by cuisine, meal type, dietary preferences, and more.
 - **Search Functionality**: Users can search for recipes using keywords to find specific dishes quickly.
-- **Favorite Recipes**: Users can add recipes to their favorites list for easy access later.
+- **Favorite Recipes**: Users can add recipes to their favourites list for easy access later.
 - **Clean Architecture**: Recipe Discover follows the principles of Clean Architecture, ensuring a modular and maintainable codebase.
 - **Dependency Injection**: Hilt is used for Dependency Injection, facilitating easier management of dependencies throughout the app.
 - **Local Storage**: Room is utilized for local storage, enabling efficient storage and retrieval of recipe data on the device.
@@ -33,4 +33,4 @@ Recipe Discover utilizes the following open-source libraries:
 - Kotlin Coroutines for asynchronous programming
 - Paging Library for efficient pagination
 - Jetpack Compose for UI
-- API: https://recipeapi.github.io
+- API: https://spoonacular.com/
