@@ -34,13 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
 import androidx.paging.LoadState
-import androidx.paging.Pager
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.theappmakerbuddy.recipeapp.core.Screen
 import com.theappmakerbuddy.recipeapp.core.lemonMilkFonts
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.SearchRecipeDtoItem
 import com.theappmakerbuddy.recipeapp.ui.common.StandardToolbar
@@ -56,7 +53,7 @@ fun SearchScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val query by viewModel.query.collectAsState()
-    val searchResults by viewModel.searchResults.collectAsState()
+    val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
 
     Scaffold(topBar = {
         StandardToolbar(
@@ -90,29 +87,28 @@ fun SearchScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            searchResults?.let { pagingData ->
-                val lazyPagingItems: LazyPagingItems<SearchRecipeDtoItem> =
-                    pagingData.collectAsLazyPagingItems()
+            LazyColumn {
+                items(searchResults.itemCount) { index ->
+                    val recipe = searchResults[index]
 
-                LazyColumn {
-                    items(lazyPagingItems) { recipe ->
+                    if (recipe != null) {
                         RecipeItem(recipe = recipe, navController = navController)
                     }
-                    lazyPagingItems.apply {
-                        when {
-                            loadState.refresh is LoadState.Loading -> {
-                                item { CircularProgressIndicator() }
-                            }
+                }
+                searchResults.apply {
+                    when {
+                        loadState.refresh is LoadState.Loading -> {
+                            item { CircularProgressIndicator() }
+                        }
 
-                            loadState.append is LoadState.Loading -> {
-                                item { CircularProgressIndicator() }
-                            }
+                        loadState.append is LoadState.Loading -> {
+                            item { CircularProgressIndicator() }
+                        }
 
-                            loadState.refresh is LoadState.Error -> {
-                                val e = loadState.refresh as LoadState.Error
-                                item {
-                                    Text("Error: ${e.error.localizedMessage}")
-                                }
+                        loadState.refresh is LoadState.Error -> {
+                            val e = loadState.refresh as LoadState.Error
+                            item {
+                                Text("Error: ${e.error.localizedMessage}")
                             }
                         }
                     }
@@ -130,6 +126,9 @@ fun RecipeItem(recipe: SearchRecipeDtoItem, navController: NavHostController) {
             .padding(8.dp)
             .clickable {
                 // Navigate to recipe details
+                navController.navigate(Screen.RecipeScreen.route + "/${recipe.id}") {
+                    launchSingleTop = true
+                }
             }
     ) {
         Row(modifier = Modifier.padding(8.dp)) {

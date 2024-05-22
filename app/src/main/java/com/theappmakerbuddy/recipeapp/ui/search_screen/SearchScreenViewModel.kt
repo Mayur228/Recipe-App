@@ -8,13 +8,10 @@ import androidx.paging.PagingData
 import com.theappmakerbuddy.recipeapp.core.Resource
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.SearchRecipeDtoItem
 import com.theappmakerbuddy.recipeapp.domain.repository.RecipeRepository
-import com.theappmakerbuddy.recipeapp.ui.home_screen.components.ComponentTopRecipesState
-import com.theappmakerbuddy.recipeapp.ui.recipe_list_screen.ToRecipeListScreenEvents
 import com.theappmakerbuddy.recipeapp.ui.search_screen.components.ComponentSearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -39,16 +36,9 @@ class SearchScreenViewModel@Inject constructor(
 
     suspend fun getAllRecipes() {
         viewModelScope.launch {
-            val allRecipe = recipeRepository.searchRecipe("")
-            allRecipe.collect {
-                when(it) {
-                    is Resource.Error -> TODO()
-                    is Resource.Loading -> TODO()
-                    is Resource.Success -> {
-
-                    }
-                }
-            }
+            recipeRepository.searchRecipe("")
+                .catch { _searchResults.value = PagingData.empty() }
+                .collect { pagingData -> _searchResults.value = pagingData }
         }
     }
     fun onSearchBoxValueChanged(newValue: String) {
@@ -62,8 +52,8 @@ class SearchScreenViewModel@Inject constructor(
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query
 
-    private val _searchResults = MutableStateFlow<PagingData<SearchRecipeDtoItem>?>(PagingData.empty())
-    val searchResults: StateFlow<PagingData<SearchRecipeDtoItem>?> = _searchResults
+    private val _searchResults = MutableStateFlow<PagingData<SearchRecipeDtoItem>>(PagingData.empty())
+    val searchResults: StateFlow<PagingData<SearchRecipeDtoItem>> = _searchResults
 
     fun onQueryChanged(newQuery: String) {
         _query.value = newQuery
@@ -73,24 +63,8 @@ class SearchScreenViewModel@Inject constructor(
     private fun searchRecipe(query: String) {
         viewModelScope.launch {
             recipeRepository.searchRecipe(query)
-                .catch { e ->
-                    _searchResults.value = PagingData.empty()
-                }
-                .collect { result ->
-                    when (result) {
-                        is Resource.Error -> {
-                            // Handle error
-                        }
-
-                        is Resource.Loading -> {
-                            // Handle loading state
-                        }
-
-                        is Resource.Success -> {
-                            _searchResults.value = result.data ?: PagingData.empty()
-                        }
-                    }
-                }
+                .catch { _searchResults.value = PagingData.empty() }
+                .collect { pagingData -> _searchResults.value = pagingData }
         }
     }
 }

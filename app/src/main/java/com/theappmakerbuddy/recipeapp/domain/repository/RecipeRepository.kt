@@ -15,7 +15,7 @@ interface RecipeRepository {
 
     suspend fun getRecipeByCategory(type: RecipeType): Flow<Resource<PagingData<SearchRecipeDtoItem>>>
 
-    suspend fun searchRecipe(query: String): Flow<Resource<PagingData<SearchRecipeDtoItem>>>
+    suspend fun searchRecipe(query: String): Flow<PagingData<SearchRecipeDtoItem>>
 
     suspend fun getRecipeDetails(recipeId: Int): Resource<RecipeDetailDto>
 

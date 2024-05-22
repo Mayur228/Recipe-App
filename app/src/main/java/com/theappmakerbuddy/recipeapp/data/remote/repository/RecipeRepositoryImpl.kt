@@ -311,9 +311,9 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun searchRecipe(
         query: String,
-    ): Flow<Resource<PagingData<SearchRecipeDtoItem>>> = flow{
+    ): Flow<PagingData<SearchRecipeDtoItem>> {
 
-        try {
+        /*try {
 //            val shouldJustLoadFromCache = !fetchFromRemote && recipeDao.searchRecipe("").isNotEmpty()
 //            val myRecipes: List<RecipeEntity> = if (shouldJustLoadFromCache) {
 //                recipeDao.getFirstFourRecipes()
@@ -342,7 +342,14 @@ class RecipeRepositoryImpl @Inject constructor(
 
         } catch (e: Exception) {
             emit(Resource.Error(error = "unable to find recipes"))
-        }
+        }*/
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchRecipePagingSource(recipeApi, query) }
+        ).flow
     }
 
     override suspend fun getRecipeDetails(recipeId: Int): Resource<RecipeDetailDto> {
