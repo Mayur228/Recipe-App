@@ -38,6 +38,7 @@ import androidx.navigation.Navigation
 import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.theappmakerbuddy.recipeapp.core.lemonMilkFonts
@@ -55,8 +56,7 @@ fun SearchScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val query by viewModel.query.collectAsState()
-    val searchResults by viewModel.searchResults.collectAsState(initial = PagingData.empty())
-    val lazyPagingItems = searchResults.collectAsLazyPagingItems()
+    val searchResults by viewModel.searchResults.collectAsState()
 
     Scaffold(topBar = {
         StandardToolbar(
@@ -75,9 +75,11 @@ fun SearchScreen(
             onBackArrowClicked = { navController.popBackStack() }
         )
     }) { padding ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
             OutlinedTextField(
                 value = query,
                 onValueChange = { viewModel.onQueryChanged(it) },
@@ -88,34 +90,38 @@ fun SearchScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            /*LazyColumn {
-                items(lazyPagingItems) { recipe ->
-                    recipe?.let {
-                        RecipeItem(recipe = it, navController = navController)
+            searchResults?.let { pagingData ->
+                val lazyPagingItems: LazyPagingItems<SearchRecipeDtoItem> =
+                    pagingData.collectAsLazyPagingItems()
+
+                LazyColumn {
+                    items(lazyPagingItems) { recipe ->
+                        RecipeItem(recipe = recipe, navController = navController)
                     }
-                }
-                lazyPagingItems.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            item { CircularProgressIndicator() }
-                        }
+                    lazyPagingItems.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                item { CircularProgressIndicator() }
+                            }
 
-                        loadState.append is LoadState.Loading -> {
-                            item { CircularProgressIndicator() }
-                        }
+                            loadState.append is LoadState.Loading -> {
+                                item { CircularProgressIndicator() }
+                            }
 
-                        loadState.refresh is LoadState.Error -> {
-                            val e = loadState.refresh as LoadState.Error
-                            item {
-                                Text("Error: ${e.error.localizedMessage}")
+                            loadState.refresh is LoadState.Error -> {
+                                val e = loadState.refresh as LoadState.Error
+                                item {
+                                    Text("Error: ${e.error.localizedMessage}")
+                                }
                             }
                         }
                     }
                 }
-            }*/
+            }
         }
     }
 }
+
 @Composable
 fun RecipeItem(recipe: SearchRecipeDtoItem, navController: NavHostController) {
     Card(
@@ -135,7 +141,12 @@ fun RecipeItem(recipe: SearchRecipeDtoItem, navController: NavHostController) {
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(recipe.title, style = MaterialTheme.typography.h6)
-                Text(recipe.title, style = MaterialTheme.typography.body2, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(
+                    recipe.title,
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }

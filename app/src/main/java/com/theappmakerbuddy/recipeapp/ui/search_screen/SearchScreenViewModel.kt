@@ -78,8 +78,14 @@ class SearchScreenViewModel@Inject constructor(
                 }
                 .collect { result ->
                     when (result) {
-                        is Resource.Error -> TODO()
-                        is Resource.Loading -> TODO()
+                        is Resource.Error -> {
+                            // Handle error
+                        }
+
+                        is Resource.Loading -> {
+                            // Handle loading state
+                        }
+
                         is Resource.Success -> {
                             _searchResults.value = result.data ?: PagingData.empty()
                         }
