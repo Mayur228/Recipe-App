@@ -23,11 +23,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -47,11 +44,6 @@ fun SearchScreen(
     viewModel: SearchScreenViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-    val recipes = viewModel.recipes
-    val showSearchBoxState = rememberSaveable { mutableStateOf(false) }
-    val searchBoxState = viewModel.searchBoxState.value
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     val query by viewModel.query.collectAsState()
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
 
@@ -98,17 +90,44 @@ fun SearchScreen(
                 searchResults.apply {
                     when {
                         loadState.refresh is LoadState.Loading -> {
-                            item { CircularProgressIndicator() }
+                            item {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                )
+                            }
                         }
 
                         loadState.append is LoadState.Loading -> {
-                            item { CircularProgressIndicator() }
+                            item {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                )
+                            }
                         }
 
                         loadState.refresh is LoadState.Error -> {
                             val e = loadState.refresh as LoadState.Error
                             item {
-                                Text("Error: ${e.error.localizedMessage}")
+                                Text(
+                                    text = "Error: ${e.error.localizedMessage}",
+                                    color = Color.Red,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }
+                        }
+
+                        loadState.append is LoadState.Error -> {
+                            val e = loadState.append as LoadState.Error
+                            item {
+                                Text(
+                                    text = "Error: ${e.error.localizedMessage}",
+                                    color = Color.Red,
+                                    modifier = Modifier.padding(16.dp)
+                                )
                             }
                         }
                     }

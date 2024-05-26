@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface RecipeRepository {
     suspend fun getTopRecipe(): Resource<List<RecipeDtoItem>>
 
-    suspend fun getRecipeByCategory(type: RecipeType): Flow<Resource<PagingData<SearchRecipeDtoItem>>>
+    suspend fun getRecipeByCategory(type: String): Flow<PagingData<SearchRecipeDtoItem>>
 
     suspend fun searchRecipe(query: String): Flow<PagingData<SearchRecipeDtoItem>>
 

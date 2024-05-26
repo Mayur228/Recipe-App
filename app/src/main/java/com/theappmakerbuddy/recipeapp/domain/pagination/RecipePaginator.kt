@@ -9,7 +9,7 @@ import java.io.IOException
 
 class RecipePagingSource(
     private val recipeApi: RecipeApi,
-    private val type: RecipeType,
+    private val type: String,
 ) : PagingSource<Int, SearchRecipeDtoItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SearchRecipeDtoItem> {

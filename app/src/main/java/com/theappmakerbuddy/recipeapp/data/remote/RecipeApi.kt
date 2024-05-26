@@ -18,7 +18,7 @@ interface RecipeApi {
     @ApiKey
     @GET("recipes/complexSearch")
     suspend fun getRecipeByCategory(
-        @Query("type") type: RecipeType,
+        @Query("type") type: String,
         @Query("query") query: String,
         @Query("offset") offset: Int,
         @Query("number") number: Int,

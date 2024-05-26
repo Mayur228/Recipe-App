@@ -274,39 +274,16 @@ class RecipeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecipeByCategory(
-        type: RecipeType,
-    ): Flow<Resource<PagingData<SearchRecipeDtoItem>>> = flow {
+        type: String,
+    ): Flow<PagingData<SearchRecipeDtoItem>> {
 
-        try {
-//            val shouldJustLoadFromCache = !fetchFromRemote && recipeDao.searchRecipe("").isNotEmpty()
-//            val myRecipes: List<RecipeEntity> = if (shouldJustLoadFromCache) {
-//                recipeDao.getFirstFourRecipes()
-//            } else {
-//                val remoteEntities = recipeApi.getRecipeList("snacks")
-//                recipeDao.clearRecipes()
-//                recipeDao.insertRecipes(remoteEntities.map {
-//                    it.toRecipeEntity()
-//                })
-//                recipeDao.getFirstFourRecipes()
-//            }
-//            val recipes = myRecipes.map {
-//                it.toRecipeDtoItem()
-//            }
-            val pager = Pager(
-                config = PagingConfig(
-                    pageSize = 10,
-                    enablePlaceholders = false
-                ),
-                pagingSourceFactory = { RecipePagingSource(recipeApi, type) }
-            ).flow
-
-            emitAll(pager.map { pagingData ->
-                Resource.Success(pagingData)
-            })
-
-        } catch (e: Exception) {
-            emit(Resource.Error(error = "unable to find recipes"))
-        }
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { RecipePagingSource(recipeApi, type) }
+        ).flow
     }
 
     override suspend fun searchRecipe(
