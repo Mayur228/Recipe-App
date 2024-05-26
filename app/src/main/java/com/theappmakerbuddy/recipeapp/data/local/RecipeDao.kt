@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface RecipeDao{
     @Insert(entity = RecipeEntity::class,onConflict = REPLACE)
-    suspend fun insertRecipes(recipeEntities: List<RecipeEntity>)
+    suspend fun insertRecipes(recipeEntities: RecipeEntity)
 
     @Query("DELETE FROM recipeentity")
     suspend fun clearRecipes()

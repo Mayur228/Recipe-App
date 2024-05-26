@@ -2,6 +2,7 @@ package com.theappmakerbuddy.recipeapp.data.mapper
 
 import com.theappmakerbuddy.recipeapp.data.local.LocalRecipeEntity
 import com.theappmakerbuddy.recipeapp.data.local.RecipeEntity
+import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDetailDto
 import com.theappmakerbuddy.recipeapp.data.remote.dto.recipes.RecipeDtoItem
 import com.theappmakerbuddy.recipeapp.domain.model.ModelLocalRecipe
 
