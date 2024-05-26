@@ -44,6 +44,15 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    suspend fun refreshData() {
+        viewModelScope.launch {
+            val topRecipesDeferred = async { loadTopRecipes() }
+            val categoriesDeferred = async { loadCategories() }
+            topRecipesDeferred.await()
+            categoriesDeferred.await()
+        }
+    }
+
     private suspend fun loadTopRecipes() {
         when (val recipeState = recipeRepository.getTopRecipe()) {
             is Resource.Error -> {

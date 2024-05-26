@@ -23,8 +23,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +43,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.theappmakerbuddy.recipeapp.R
 import com.theappmakerbuddy.recipeapp.core.MyPadding
 import com.theappmakerbuddy.recipeapp.core.Screen
@@ -47,6 +55,9 @@ import com.theappmakerbuddy.recipeapp.ui.common.StandardToolbar
 import com.theappmakerbuddy.recipeapp.ui.home_screen.components.ComponentCategoriesState
 import com.theappmakerbuddy.recipeapp.ui.home_screen.components.ComponentTopRecipesState
 import com.theappmakerbuddy.recipeapp.ui.theme.primaryGray
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -57,6 +68,21 @@ fun HomeScreen(
 ) {
     val topRecipesState by viewModel.topRecipes
     val categoriesListState = viewModel.categoriesState.value
+
+    var isRefreshing by remember{ mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+
+    fun refreshData() {
+        coroutineScope.launch {
+            viewModel.refreshData()
+            isRefreshing = false
+        }
+    }
+
+    // SwipeRefresh state
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
 
     Scaffold(topBar = {
         StandardToolbar(
@@ -86,8 +112,22 @@ fun HomeScreen(
             }
         )
     }) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            CategoriesContent(categoriesListState, topRecipesState, navController)
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = {
+                isRefreshing = true
+                refreshData()
+            },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger
+                )
+            }
+        ) {
+            Column(modifier = Modifier.padding(padding)) {
+                CategoriesContent(categoriesListState, topRecipesState, navController)
+            }
         }
     }
 
